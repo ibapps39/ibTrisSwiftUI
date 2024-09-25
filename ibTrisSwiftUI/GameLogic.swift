@@ -121,6 +121,19 @@ class GameModel: ObservableObject {
         spawnTetromino() // Spawn a new tetromino
         startGravityTimer() // Restart the gravity timer
     }
+    
+    func calculateLandingPosition() -> [(row: Int, column: Int)] {
+        guard let currentTetromino = currentTetromino else { return [] }
+        var landingPosition = currentTetromino.position
+        
+        // Keep moving down until it can no longer move
+        while canMove(to: landingPosition.map { (row: $0.row + 1, column: $0.column) }) {
+            landingPosition = landingPosition.map { (row: $0.row + 1, column: $0.column) }
+        }
+        
+        return landingPosition
+    }
+
 
     private func clearFullLines() {
         for row in (0..<grid.rows).reversed() {
