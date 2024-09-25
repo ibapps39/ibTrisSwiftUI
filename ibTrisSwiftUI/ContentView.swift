@@ -10,9 +10,10 @@ import SwiftUI
 struct ContentView: View {
     @StateObject private var gameModel = GameModel()
     var body: some View {
-        GridView(gameModel: gameModel)
+        GridView()
     }
 }
+
 
 #Preview {
     ContentView()

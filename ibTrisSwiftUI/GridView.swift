@@ -7,51 +7,105 @@
 
 import SwiftUI
 
+import SwiftUI
+
 struct Grid {
-    // height
     let rows: Int
-    // length
     let columns: Int
     var grid: [[Int]]
     
     init(rows: Int, columns: Int) {
         self.rows = rows
         self.columns = columns
-        self.grid = Array(repeating:
-                            Array(repeating: 0, count: columns),
-                          count: rows)
+        self.grid = Array(repeating: Array(repeating: 0, count: columns), count: rows)
     }
 }
 
 struct GridView: View {
-    @State private var grid: Grid = Grid(rows: 20, columns: 10)
-    
-    @ObservedObject var gameModel = GameModel()
-    
+    @StateObject private var gameModel = GameModel()
+    @State private var lastDragValue: CGSize = .zero // Track last drag position
     let cellSize: CGFloat = 25
+    private let dragThreshold: CGFloat = 30 // Set a threshold for dragging
     
     var body: some View {
         VStack {
-            ForEach(0..<grid.rows, id:\.self) { row in
-                HStack {
-                    ForEach(0..<grid.columns, id: \.self) { column in
-                        Rectangle()
-                            .fill(self.cellColor(forRow: row, column: column))
-                            .frame(width: cellSize, height: cellSize)
+            if gameModel.gameOver {
+                Text("Game Over")
+                    .font(.largeTitle)
+                    .foregroundColor(.red)
+                    .padding()
+                Button(action: gameModel.resetGame) {
+                    Text("Restart?")
+                }
+            } else {
+                ForEach(0..<gameModel.grid.rows, id: \.self) { row in
+                    HStack {
+                        ForEach(0..<gameModel.grid.columns, id: \.self) { column in
+                            Rectangle()
+                                .fill(self.cellColor(forRow: row, column: column))
+                                .frame(width: cellSize, height: cellSize)
+                        }
                     }
                 }
             }
         }
         .padding()
+        .gesture(
+            DragGesture()
+                .onChanged { value in
+                    let newDragValue = value.translation
+                    
+                    // Calculate deltas
+                    let horizontalDelta = newDragValue.width - lastDragValue.width
+                    let verticalDelta = newDragValue.height - lastDragValue.height
+                    
+                    // Handle horizontal movement with a threshold
+                    if abs(horizontalDelta) > dragThreshold {
+                        let direction = horizontalDelta > 0 ? 1 : -1
+                        gameModel.moveTetromino(direction: direction)
+                        
+                        // Reset lastDragValue to allow for continuous dragging
+                        lastDragValue.width = newDragValue.width
+                    }
+                    
+                    // Handle vertical movement with a threshold
+                    if verticalDelta > dragThreshold {
+                        gameModel.activateGravity()
+                        
+                        // Reset lastDragValue to allow for continuous dragging
+                        lastDragValue.height = newDragValue.height
+                    }
+                }
+                .onEnded { _ in
+                    lastDragValue = .zero // Reset on drag end
+                }
+        )
+
+
+
+        Button(action: {
+            gameModel.rotateTetromino() // Call rotation on button press
+        }) {
+            Text("Rotate 45°")
+                .font(.title)
+                .padding()
+                .background(Color.green)
+                .foregroundColor(.white)
+                .cornerRadius(10)
+        }
     }
+
     private func cellColor(forRow row: Int, column: Int) -> Color {
-        // Check if the current tetromino is present at the given grid position
         if let currentTetromino = gameModel.currentTetromino {
             for position in currentTetromino.position {
                 if position.row == row && position.column == column {
                     return currentTetromino.type.color
                 }
             }
+        }
+        // Check for locked positions
+        if gameModel.grid.grid[row][column] != 0 {
+            return Color.gray // Color for locked cells (you can customize this)
         }
         return Color.blue // Default color for empty cells
     }
