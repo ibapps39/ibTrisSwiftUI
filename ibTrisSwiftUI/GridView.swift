@@ -84,6 +84,7 @@ struct GridView: View {
                     .onEnded { _ in
                         lastDragValue = .zero // Reset on drag end
                     }
+                
             )
         }
         Button(action: {
