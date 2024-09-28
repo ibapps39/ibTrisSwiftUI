@@ -17,6 +17,7 @@
 		3C64CC9B2CA1CA2700FE20F0 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C64CC9A2CA1CA2700FE20F0 /* Extensions.swift */; };
 		3C64CCA12CA1DF4900FE20F0 /* GridView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C64CCA02CA1DF4900FE20F0 /* GridView.swift */; };
 		3C64CCA32CA1F0A800FE20F0 /* Tetromino.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C64CCA22CA1F0A800FE20F0 /* Tetromino.swift */; };
+		3CE3EF5B2CA7D149003539F2 /* Documentation.docc in Sources */ = {isa = PBXBuildFile; fileRef = 3CE3EF5A2CA7D149003539F2 /* Documentation.docc */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -31,6 +32,7 @@
 		3C64CC9A2CA1CA2700FE20F0 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		3C64CCA02CA1DF4900FE20F0 /* GridView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GridView.swift; sourceTree = "<group>"; };
 		3C64CCA22CA1F0A800FE20F0 /* Tetromino.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tetromino.swift; sourceTree = "<group>"; };
+		3CE3EF5A2CA7D149003539F2 /* Documentation.docc */ = {isa = PBXFileReference; lastKnownFileType = folder.documentationcatalog; path = Documentation.docc; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -47,6 +49,7 @@
 		3C64CC6E2CA1BD5900FE20F0 = {
 			isa = PBXGroup;
 			children = (
+				3CE3EF5A2CA7D149003539F2 /* Documentation.docc */,
 				3C64CC792CA1BD5900FE20F0 /* ibTrisSwiftUI */,
 				3C64CC782CA1BD5900FE20F0 /* Products */,
 			);
@@ -159,6 +162,7 @@
 				3C64CCA12CA1DF4900FE20F0 /* GridView.swift in Sources */,
 				3C64CC7D2CA1BD5900FE20F0 /* ContentView.swift in Sources */,
 				3C64CC7B2CA1BD5900FE20F0 /* ibTrisSwiftUIApp.swift in Sources */,
+				3CE3EF5B2CA7D149003539F2 /* Documentation.docc in Sources */,
 				3C64CC8F2CA1BEEF00FE20F0 /* GameLogic.swift in Sources */,
 				3C64CCA32CA1F0A800FE20F0 /* Tetromino.swift in Sources */,
 				3C64CC892CA1BDE700FE20F0 /* MetalRenderer.swift in Sources */,
