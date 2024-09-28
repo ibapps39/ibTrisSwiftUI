@@ -24,6 +24,8 @@ struct GridView: View {
     @State private var lastDragValue: CGSize = .zero // Track last drag position
     let cellSize: CGFloat = 25
     private let dragThreshold: CGFloat = 30 // Set a threshold for dragging
+    private let verticalFlickThreshold: CGFloat = 2
+    private let flickDragTimeThresold: CGFloat = 0.5
     let gridColor: Color = Color.gray
     
     var body: some View {
@@ -56,8 +58,19 @@ struct GridView: View {
             }
             .padding()
             .gesture(
+                TapGesture()
+                    .onEnded {
+                        gameModel.rotateTetromino()
+                    }
+            )
+            .gesture(
                 DragGesture()
                     .onChanged { value in
+                        if gameModel.isDragTimerNil() {
+                            gameModel.resetDragDuration()
+                            gameModel.startDragTimer()
+                        }
+                        
                         let newDragValue = value.translation
                         
                         // Calculate deltas
@@ -81,10 +94,19 @@ struct GridView: View {
                             lastDragValue.height = newDragValue.height
                         }
                     }
-                    .onEnded { _ in
+                    .onEnded { value in
+                        gameModel.stopDragTimer()
+                        let dragDuration = gameModel.getDragDuration()
+                        let velocityY = value.velocity.height
+                        
+                        if velocityY > verticalFlickThreshold && flickDragTimeThresold < 1 {
+                            gameModel.currentTetromino?.position = gameModel.calculateLandingPosition()
+                            gameModel.setAndPlaceTetromino()
+                        }
+                        // Redundant yes, but not sure why not
+                        gameModel.resetDragDuration()
                         lastDragValue = .zero // Reset on drag end
                     }
-                
             )
         }
         Button(action: {
